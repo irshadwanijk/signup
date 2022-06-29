@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300&family=Noto+Sans&family=Poppins:wght@300;400;500;600;700&display=swap");
+body {
+  font-family: "poppins";
+  box-sizing: border-box;
+  font-family: poppins;
+  font-size: 16px;
+  /* background: url(./images/bg-intro-desktop.png); */
+  background-color: rgb(40, 101, 92);
+}
+
+.App {
+  max-width: 1440px;
+  margin: 0 auto;
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.sideText {
+  color: white;
+  max-width: 500px;
+  margin-right: 100px;
+}
+
+#formControl {
+  /* margin: 10, 20px; */
+  /* width: 550px; */
+  padding: 25px;
+  border-radius: 10px;
+}
+#trialCard,
+.trialSpan {
+  margin-bottom: 20px;
+  border-radius: 5px;
+  background-color: hsl(248, 32%, 49%);
+  color: white;
+  height: 45px;
+  text-align: center;
+  justify-content: center;
+}
+
+.T-C,
+span {
+  margin-top: 10px;
+  background-color: white;
+  font-size: 10px;
+  text-align: center;
+}
+
+div,
+i {
+  font-size: 10px;
+  color: hsl(0, 100%, 74%);
+  text-align: end;
+}
+
+.sideText h1,
+p {
+  text-align: left;
+}
