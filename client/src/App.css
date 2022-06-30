@@ -1,62 +1,72 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300&family=Noto+Sans&family=Poppins:wght@300;400;500;600;700&display=swap");
 body {
+  max-width: 1440px;
+  margin: 0 auto;
+  margin-top: 4rem;
   font-family: "poppins";
   box-sizing: border-box;
   font-family: poppins;
-  font-size: 16px;
+  color: white;
   /* background: url(./images/bg-intro-desktop.png); */
   background-color: rgb(40, 101, 92);
 }
 
-.App {
-  max-width: 1440px;
+.App-container {
   margin: 0 auto;
-  margin-top: 5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: end;
 }
 
 .sideText {
-  color: white;
-  max-width: 500px;
-  margin-right: 100px;
+  align-self: center;
+}
+.form {
+  max-width: 400px;
 }
 
 #formControl {
-  /* margin: 10, 20px; */
-  /* width: 550px; */
   padding: 25px;
   border-radius: 10px;
 }
 #trialCard,
 .trialSpan {
+  font-size: 0.8rem;
   margin-bottom: 20px;
   border-radius: 5px;
   background-color: hsl(248, 32%, 49%);
-  color: white;
   height: 45px;
   text-align: center;
   justify-content: center;
 }
 
-.T-C,
-span {
+.claim-trial-footer {
   margin-top: 10px;
   background-color: white;
   font-size: 10px;
   text-align: center;
 }
 
-div,
 i {
   font-size: 10px;
   color: hsl(0, 100%, 74%);
   text-align: end;
 }
 
-.sideText h1,
-p {
-  text-align: left;
+@media (max-width: 900px) {
+  .App-container {
+    margin: 0 auto;
+    max-width: 380px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    justify-content: center;
+  }
+  h2 {
+    font-size: 1.6rem;
+  }
+  p {
+    font-size: 0.8rem;
+  }
 }

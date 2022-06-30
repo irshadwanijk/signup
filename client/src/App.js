@@ -84,17 +84,21 @@ export default function App() {
   }
 
   return (
-    <div className="App">
+    <div className="App-container">
       <div className="sideText">
-        <h1>Learn to code by watching others</h1>
-        <p>
-          See how experienced developers solve problems in real time Watching
-          scripted tutorials is great, by understanding how developers think is
-          invaluable.
-        </p>
+        <div>
+          <h2>Learn to code by watching others</h2>
+        </div>
+        <div>
+          <p>
+            See how experienced developers solve problems in real time Watching
+            scripted tutorials is great, by understanding how developers think
+            is invaluable.
+          </p>
+        </div>
       </div>
 
-      <div>
+      <div className="form">
         <div className="card" id="trialCard">
           <div className="card-body">
             {" "}
@@ -153,7 +157,7 @@ export default function App() {
             </button>
           </div>
           <div>
-            <p className="T-C">
+            <p className="claim-trial-footer">
               <span style={{ color: " hsl(246, 25%, 77%)" }}>
                 By clicking the button, you are agreeing to our{" "}
               </span>{" "}
