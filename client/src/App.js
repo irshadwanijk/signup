@@ -14,62 +14,122 @@ export default function App() {
   function setFirstName(e) {
     setUser((user) => {
       user.firstName = e.target.value;
-      if (!e.target.value) {
-        user.firstName = "";
-      }
     });
   }
   function setLastName(e) {
     setUser((user) => {
       user.lastName = e.target.value;
-      if (!e.target.value) {
-        user.lastName = "";
-      }
-    });
-  }
-
-  function setEmail(e) {
-    let val = e.target.value;
-    setUser((user) => {
-      user.email = val;
-      if (!val) {
-        user.email = "";
-      }
-      let emailPattern = /^[a-z 0-9 .]+\@[a-z]+\.[a-z]{3,5}$/;
-      if (!val.match(emailPattern) && val) {
-        user.email = "";
-      }
     });
   }
 
   function setPassword(e) {
     setUser((user) => {
       user.password = e.target.value;
-      if (!e.target.value) {
-        user.password = "";
-      }
     });
+  }
+
+  function setEmail(e) {
+    setUser((user) => {
+      user.email = e.target.value;
+    });
+  }
+
+  function checkFirstName(e) {
+    if (!user.firstName) {
+      let ele = document.getElementById("fNameErr");
+      if (ele !== null) {
+        ele.innerText = "First Name cannot be empty";
+      }
+    }
+  }
+  function checkLastName(e) {
+    if (!user.lastName) {
+      let ele = document.getElementById("lNameErr");
+      if (ele !== null) {
+        ele.innerText = "Last Name cannot be empty";
+      }
+    }
+  }
+  function checkEmail(e) {
+    console.log(user.email);
+    const evalEmail = user.email.match(
+      /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,15}$/
+    );
+    let ele = document.getElementById("emailErr");
+
+    if (!user.email) {
+      if (ele !== null) {
+        ele.innerText = "Email cannot be empty";
+      }
+    }
+    if (!evalEmail) {
+      if (ele !== null) {
+        ele.innerText = "Invalid Email Id";
+      }
+    }
+  }
+
+  function checkPassword(e) {
+    let ele = document.getElementById("passErr");
+
+    if (!user.password) {
+      if (ele !== null) {
+        ele.innerText = "Password cannot be empty";
+      }
+    } else {
+      if (ele !== null) {
+        ele.innerText = "";
+      }
+    }
+
+    if (user.password.length < 8) {
+      if (ele !== null) {
+        ele.innerText = "Password must be at least 8 characters";
+      }
+    }
   }
 
   function onSignUp(e) {
     e.preventDefault();
+    console.log(
+      user.firstName,
+      " ",
+      user.lastName,
+      " ",
+      user.email,
+      " ",
+      user.password
+    );
     let userEnteredData = {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
       password: user.password,
     };
-    if (user.firstName && user.lastName && user.email && user.password) {
+    if (
+      user.firstName &&
+      user.lastName &&
+      user.email.match(/^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,15}$/) &&
+      user.password.length > 8
+    ) {
       axios
         .post("http://localhost:3001/signup", userEnteredData)
         .then((res) => {
           console.log(res.data);
           console.log("Congrats your data was received from backend ):");
+          let ele = document.getElementById("signUpMsg");
+          if (ele !== null) {
+            ele.innerText = "User Created Successfully ):";
+          }
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
+      let ele = document.getElementById("signUpMsg");
+      if (ele !== null) {
+        ele.innerText = "Please provide correct details";
+      }
       console.log("One of the field is wrong or missing (:");
     }
     axios
@@ -114,8 +174,14 @@ export default function App() {
               placeholder="First Name"
               value={user.firstName}
               onChange={setFirstName}
+              onBlur={checkFirstName}
+              onKeyPress={(e) => {
+                if (e.key === "Tab") {
+                  checkFirstName();
+                }
+              }}
             />
-            {user.firstName === "" ? <i>first name cannot be empty</i> : ""}
+            <i id="fNameErr">{user.firstName ? "" : null}</i>
           </div>
           <div className="form-group">
             <input
@@ -123,8 +189,14 @@ export default function App() {
               className="form-control"
               placeholder="Last Name"
               onChange={setLastName}
+              onBlur={checkLastName}
+              onKeyPress={(e) => {
+                if (e.key === "Tab") {
+                  checkLastName();
+                }
+              }}
             />
-            {user.lastName === "" ? <i>Last Name cannot be empty</i> : null}
+            <i id="lNameErr"> {user.lastName ? "" : null}</i>
           </div>
           <div className="form-group">
             <input
@@ -132,11 +204,14 @@ export default function App() {
               type="email"
               placeholder="Email Address"
               onChange={setEmail}
+              onBlur={checkEmail}
+              onKeyPress={(e) => {
+                if (e.key === "Tab") {
+                  checkEmail();
+                }
+              }}
             />
-            {user.email === "" ? <i>Email cannot be empty</i> : null}
-            {user.email === "invalid" ? (
-              <i>Looks like this is not an email </i>
-            ) : null}
+            <i id="emailErr">{user.email ? "" : null}</i>
           </div>
           <div className="form-group">
             <input
@@ -144,8 +219,14 @@ export default function App() {
               type="password"
               placeholder="Password"
               onChange={setPassword}
+              onBlur={checkPassword}
+              onKeyPress={(e) => {
+                if (e.key === "Tab") {
+                  checkPassword();
+                }
+              }}
             />
-            {user.password === "" ? <i>Password cannot be empty</i> : ""}
+            <i id="passErr">{user.password ? "" : null}</i>
           </div>
           <div>
             <button
@@ -163,6 +244,12 @@ export default function App() {
               </span>{" "}
               <b style={{ color: "hsl(0, 100%, 74%)" }}>Terms and Services</b>
             </p>
+          </div>
+          <div>
+            <i
+              id="signUpMsg"
+              style={{ marginLeft: "4rem", fontSize: "0.6rem" }}
+            ></i>
           </div>
         </form>
       </div>
