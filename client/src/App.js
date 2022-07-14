@@ -1,5 +1,6 @@
 // @ts-check
 import "./App.css";
+import React from "react";
 import { useImmer } from "use-immer";
 import axios from "axios";
 
@@ -14,23 +15,55 @@ export default function App() {
   function setFirstName(e) {
     setUser((user) => {
       user.firstName = e.target.value;
+      if (user.firstName) {
+        const ele = document.getElementById("fNameErr");
+        if (ele !== null) {
+          ele.innerHTML = "";
+        }
+      }
     });
   }
   function setLastName(e) {
     setUser((user) => {
       user.lastName = e.target.value;
-    });
-  }
-
-  function setPassword(e) {
-    setUser((user) => {
-      user.password = e.target.value;
+      let ele = document.getElementById("lNameErr");
+      if (user.lastName) {
+        if (ele !== null) {
+          ele.innerText = "";
+        }
+      }
     });
   }
 
   function setEmail(e) {
+    const isEmail = user.email.match(
+      /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,15}$/
+    );
+    let ele = document.getElementById("emailErr");
     setUser((user) => {
       user.email = e.target.value;
+      if (user.email && !isEmail) {
+        if (ele !== null) ele.innerText = "Invalid Email Id";
+      } else {
+        if (ele !== null) {
+          ele.innerHTML = "";
+        }
+      }
+    });
+  }
+  function setPassword(e) {
+    let ele = document.getElementById("passErr");
+    setUser((user) => {
+      user.password = e.target.value;
+      if (user.password && user.password.length < 8) {
+        if (ele !== null) {
+          ele.innerText = "Password must be at least 8 characters";
+        }
+      } else {
+        if (ele !== null) {
+          ele.innerHTML = "";
+        }
+      }
     });
   }
 
@@ -51,20 +84,10 @@ export default function App() {
     }
   }
   function checkEmail(e) {
-    console.log(user.email);
-    const evalEmail = user.email.match(
-      /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,15}$/
-    );
     let ele = document.getElementById("emailErr");
-
     if (!user.email) {
       if (ele !== null) {
         ele.innerText = "Email cannot be empty";
-      }
-    }
-    if (!evalEmail) {
-      if (ele !== null) {
-        ele.innerText = "Invalid Email Id";
       }
     }
   }
@@ -76,36 +99,19 @@ export default function App() {
       if (ele !== null) {
         ele.innerText = "Password cannot be empty";
       }
-    } else {
-      if (ele !== null) {
-        ele.innerText = "";
-      }
-    }
-
-    if (user.password.length < 8) {
-      if (ele !== null) {
-        ele.innerText = "Password must be at least 8 characters";
-      }
     }
   }
 
   function onSignUp(e) {
     e.preventDefault();
-    console.log(
-      user.firstName,
-      " ",
-      user.lastName,
-      " ",
-      user.email,
-      " ",
-      user.password
-    );
+
     let userEnteredData = {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
       password: user.password,
     };
+
     if (
       user.firstName &&
       user.lastName &&
@@ -115,18 +121,31 @@ export default function App() {
       axios
         .post("http://localhost:3001/signup", userEnteredData)
         .then((res) => {
-          console.log(res.data);
-          console.log("Congrats your data was received from backend ):");
-          let ele = document.getElementById("signUpMsg");
-          if (ele !== null) {
-            ele.innerText = "User Created Successfully ):";
+          const resData = res.data;
+          // console.log(res.data);
+          if (resData.errCode === 11000) {
+            let ele = document.getElementById("emailErr");
+            if (ele !== null) {
+              ele.innerText = "Email already exists";
+            }
+          } else {
+            let ele = document.getElementById("onSignUp");
+            if (ele !== null) {
+              ele.innerText = "User Created Successfully ):";
+            }
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.code);
+          if (err.code === "ERR_BAD_RESPONSE") {
+            const ele = document.getElementById("onSignUp");
+            if (ele !== null) {
+              ele.innerHTML = "Uh oh, Something went wrong!";
+            }
+          }
         });
     } else {
-      let ele = document.getElementById("signUpMsg");
+      let ele = document.getElementById("onSignUp");
       if (ele !== null) {
         ele.innerText = "Please provide correct details";
       }
@@ -181,13 +200,14 @@ export default function App() {
                 }
               }}
             />
-            <i id="fNameErr">{user.firstName ? "" : null}</i>
+            <i id="fNameErr"></i>
           </div>
           <div className="form-group">
             <input
               type="text"
               className="form-control"
               placeholder="Last Name"
+              value={user.lastName}
               onChange={setLastName}
               onBlur={checkLastName}
               onKeyPress={(e) => {
@@ -196,13 +216,14 @@ export default function App() {
                 }
               }}
             />
-            <i id="lNameErr"> {user.lastName ? "" : null}</i>
+            <i id="lNameErr"> </i>
           </div>
           <div className="form-group">
             <input
               className="form-control"
               type="email"
               placeholder="Email Address"
+              value={user.email}
               onChange={setEmail}
               onBlur={checkEmail}
               onKeyPress={(e) => {
@@ -211,7 +232,7 @@ export default function App() {
                 }
               }}
             />
-            <i id="emailErr">{user.email ? "" : null}</i>
+            <i id="emailErr"></i>
           </div>
           <div className="form-group">
             <input
@@ -226,7 +247,7 @@ export default function App() {
                 }
               }}
             />
-            <i id="passErr">{user.password ? "" : null}</i>
+            <i id="passErr"></i>
           </div>
           <div>
             <button
@@ -247,7 +268,7 @@ export default function App() {
           </div>
           <div>
             <i
-              id="signUpMsg"
+              id="onSignUp"
               style={{ marginLeft: "4rem", fontSize: "0.6rem" }}
             ></i>
           </div>

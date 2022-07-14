@@ -3,9 +3,8 @@ body {
   max-width: 1440px;
   margin: 0 auto;
   margin-top: 4rem;
-  font-family: "poppins";
   box-sizing: border-box;
-  font-family: poppins;
+  font-family: poppins, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: white;
   /* background: url(./images/bg-intro-desktop.png); */
   background-color: rgb(40, 101, 92);

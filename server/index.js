@@ -17,7 +17,7 @@ mongoose
     console.log("Connection running..");
   })
   .catch((err) => {
-    console.log("Uh Oh, there something went wrong!");
+    console.log("Uh Oh, something went wrong!");
     console.log(err);
   });
 // ****************************************
@@ -44,7 +44,13 @@ app.post("/signup", async (req, res) => {
     });
     console.log("Data inserted Successfully into database using post ):");
   } catch (err) {
-    console.log(err);
+    if (err.name === "MongoServerError" && err.code === 11000) {
+      res.send({ err: "Email should be unique", errCode: 11000 });
+    } else {
+      console.log(err);
+    }
+
+    console.log(err.name, " ", err.code);
   }
 });
 
